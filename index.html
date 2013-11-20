@@ -4,27 +4,26 @@
     <title>Silicon Labs MCU serial Bootloader Data Source</title>
   </head>
   <body>
-    <div id='container' style='width:750px'>
+    <div id='container' style='width:650px'>
     <div id='header' style = 'background-color:#EEEEEE;'>
-      <pre>                 <font size='2' color='blue'>COM port   Baud Rate   Data Bits    Parity      Stop Bits  Flow Control</font></pre>
       <button type='button' id='openHexFile' onclick=openFileOption()>Select Hex File(s)</button>
-      <select title='COM Port' name='COM Port' style='width:80px'>
+      <select title='COM Port' name='COM Port'>
         <option value='COM1' selected>COM1</option>
         <option value='COM4'>COM4</option>
       </select>
-      <select title='Baud Rate' name='Baud Rate' style='width:80px' disabled>
+      <select title='Baud Rate' name='Baud Rate' disabled>
         <option value='115200'>115200</option>
       </select>
-      <select title='Data Bits' name='Data Bits' style='width:80px' disabled>
+      <select title='Data Bits' name='Data Bits' disabled>
         <option value='8'>8</option>
       </select>
-      <select title='Parity' name='Parity' style='width:80px' disabled>
+      <select title='Parity' name='Parity' disabled>
         <option value='None'>None</option>
       </select>
-      <select title='Stop Bits'name='Stop Bits' style='width:80px' disabled>
+      <select title='Stop Bits'name='Stop Bits' disabled>
         <option value='One'>One</option>
       </select>
-      <select title='Flow Control'name='Flow Control' style='width:80px' disabled>
+      <select title='Flow Control'name='Flow Control' disabled>
         <option value='None'>None</option>
       </select>
       
@@ -90,8 +89,8 @@
       </table>
     </div>
 
-    <div id='content' style='background-color:#EEEEEE;height:300px;width:450px;float:left;'>
-      <textarea rows='18' cols='53' style='color:green'>
+    <div id='content' style='background-color:#EEEEEE;height:300px;width:350px;float:left;'>
+      <textarea rows='18' cols='40' style='color:green'>
 Silicon Labs MCU Serial Bootloader DataSource v0.1.
 Please select a Hex file and then open the COM port.
       </textarea>
