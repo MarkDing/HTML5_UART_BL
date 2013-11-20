@@ -6,7 +6,7 @@
   <body>
     <div id='container' style='width:750px'>
     <div id='header' style = 'background-color:#EEEEEE;'>
-      <pre>                 <font size="2" color="blue">COM port   Baud Rate   Data Bits    Parity      Stop Bits  Flow Control</font></pre>
+      <pre>                 <font size='2' color='blue'>COM port   Baud Rate   Data Bits    Parity      Stop Bits  Flow Control</font></pre>
       <button type='button' id='openHexFile' onclick=openFileOption()>Select Hex File(s)</button>
       <select title='COM Port' name='COM Port' style='width:80px'>
         <option value='COM1' selected>COM1</option>
@@ -108,7 +108,7 @@ Please select a Hex file and then open the COM port.
       </form>
     </div>
     </div>
-    <input style='display:none;' type="file" id="openFile">
-    <script src="script.js"></script>
+    <input style='display:none;' type='file' id='openFile' onchange='handleFiles(this.files)'>
+    <script src='script.js'></script>
   </body>
 </html>
