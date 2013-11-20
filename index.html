@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Silicon Labs MCU serial Bootloader Data Source</title>
+  </head>
+  <body>
+    <div id='container' style='width:750px'>
+    <div id='header' style = 'background-color:#EEEEEE;'>
+      <pre>                 <font size="2" color="blue">COM port   Baud Rate   Data Bits    Parity      Stop Bits  Flow Control</font></pre>
+      <button type='button' id='openHexFile' onclick=openFileOption()>Select Hex File(s)</button>
+      <select title='COM Port' name='COM Port' style='width:80px'>
+        <option value='COM1' selected>COM1</option>
+        <option value='COM4'>COM4</option>
+      </select>
+      <select title='Baud Rate' name='Baud Rate' style='width:80px' disabled>
+        <option value='115200'>115200</option>
+      </select>
+      <select title='Data Bits' name='Data Bits' style='width:80px' disabled>
+        <option value='8'>8</option>
+      </select>
+      <select title='Parity' name='Parity' style='width:80px' disabled>
+        <option value='None'>None</option>
+      </select>
+      <select title='Stop Bits'name='Stop Bits' style='width:80px' disabled>
+        <option value='One'>One</option>
+      </select>
+      <select title='Flow Control'name='Flow Control' style='width:80px' disabled>
+        <option value='None'>None</option>
+      </select>
+      
+      <button type='button' id='openComPort'style='float:right'>Open COM Port</button>
+    </div>
+    <div id='HexInfo' style='background-color:#EEEEEE;height:300px;width:300px;float:left'>
+      <table border='1' cellspacing='0'>
+        <tr align = 'center'>
+          <th>Field Type</th>
+          <th>Hex Image Info</th>
+          <th>Target Info</th>
+        </tr>
+        <tr>
+          <td>MCU Code</td>
+          <td>No Data</td>
+          <td>No Data</td>
+        </tr>
+        <tr>
+          <td>BL Type</td>
+          <td>No Data</td>
+          <td>No Data</td>
+        </tr>
+        <tr>
+          <td>Flash Page Size</td>
+          <td>No Data</td>
+          <td>No Data</td>
+        </tr>
+        <tr>
+          <td>App FW Version</td>
+          <td>No Data</td>
+          <td>No Data</td>
+        </tr>
+        <tr>
+          <td>Reserved</td>
+          <td>No Data</td>
+          <td>No Data</td>
+        </tr>
+        <tr>
+          <td>App Start Addr</td>
+          <td>No Data</td>
+          <td>No Data</td>
+        </tr>
+        <tr>
+          <td>App End Addr</td>
+          <td>No Data</td>
+          <td>No Data</td>
+        </tr>
+        <tr>
+          <td>BL FW Version</td>
+          <td>No Data</td>
+          <td>No Data</td>
+        </tr>
+        <tr>
+          <td>BL Buffer Size</td>
+          <td>No Data</td>
+          <td>No Data</td>
+        </tr>
+        <tr>
+          <td>BL Buffer Size</td>
+          <td>No Data</td>
+          <td>No Data</td>
+        </tr>
+      </table>
+    </div>
+
+    <div id='content' style='background-color:#EEEEEE;height:300px;width:450px;float:left;'>
+      <textarea rows='18' cols='53' style='color:green'>
+Silicon Labs MCU Serial Bootloader DataSource v0.1.
+Please select a Hex file and then open the COM port.
+      </textarea>
+    </div>
+
+    <br>
+    <br>
+    <div id='footer', style='background-color:#EEEEEE;clear:both'>
+      <button type='button' id='updateFirmware'>Update Application Firmware</button>
+      <form style='float:right'>
+        <input type='checkbox' name='Verbose' checked=true>Verbose
+        <input type='checkbox' name='Show Raw Data'>Show Raw Data 
+        <button type='button' id='clearDisplay'>Clear Display</button>
+      </form>
+    </div>
+    </div>
+    <input style='display:none;' type="file" id="openFile">
+    <script src="script.js"></script>
+  </body>
+</html>

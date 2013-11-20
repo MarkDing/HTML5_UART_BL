@@ -1,0 +1,10 @@
+{
+  "name": "Silicon Labs MCU serial Bootloader Data Source",
+  "main": "index.html",
+  "window": {
+    "show": true,
+    "position": "center",
+    "width": 800,
+    "height": 480
+  }
+}
