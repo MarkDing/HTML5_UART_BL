@@ -9,7 +9,7 @@ const DATA = 0,
 const EMPTY_VALUE = 0xFF;
 
 const FLASH_SIZE = 32768;
-const FLASH_PAGE_SIZE = 512; // 1024
+const FLASH_PAGE_SIZE = 1024; // 1024
 
 /* intel_hex.parse(data)
 	`data` - Intel Hex file (string in ASCII format or Buffer Object)
