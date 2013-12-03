@@ -7,9 +7,7 @@
     <div id='container' style='width:650px'>
     <div id='header' style = 'background-color:#EEEEEE;'>
       <button type='button' id='openHexFile' onclick=openFileOption()>Select Hex File(s)</button>
-      <select title='COM Port' name='COM Port'>
-        <option value='COM1' selected>COM1</option>
-        <option value='COM4'>COM4</option>
+      <select id='comPort' title='COM Port' name='COM Port'>
       </select>
       <select title='Baud Rate' name='Baud Rate' disabled>
         <option value='115200'>115200</option>
@@ -32,60 +30,18 @@
     <div id='HexInfo' style='background-color:#EEEEEE;height:300px;width:300px;float:left'>
       <table border='1' cellspacing='0' id= 'infoBlock'>
         <tr align = 'center'>
-          <th>Field Type</th>
-          <th>Hex Image Info</th>
-          <th>Target Info</th>
+          <th>Field Type</th> <th>Hex Image Info</th> <th>Target Info</th> 
         </tr>
-        <tr>
-          <td>MCU Code</td>
-          <td>No Data</td>
-          <td>No Data</td>
-        </tr>
-        <tr>
-          <td>BL Type</td>
-          <td>No Data</td>
-          <td>No Data</td>
-        </tr>
-        <tr>
-          <td>Flash Page Size</td>
-          <td>No Data</td>
-          <td>No Data</td>
-        </tr>
-        <tr>
-          <td>App FW Version</td>
-          <td>No Data</td>
-          <td>No Data</td>
-        </tr>
-        <tr>
-          <td>Reserved</td>
-          <td>No Data</td>
-          <td>No Data</td>
-        </tr>
-        <tr>
-          <td>App Start Addr</td>
-          <td>No Data</td>
-          <td>No Data</td>
-        </tr>
-        <tr>
-          <td>App End Addr</td>
-          <td>No Data</td>
-          <td>No Data</td>
-        </tr>
-        <tr>
-          <td>BL FW Version</td>
-          <td>No Data</td>
-          <td>No Data</td>
-        </tr>
-        <tr>
-          <td>BL Buffer Size</td>
-          <td>No Data</td>
-          <td>No Data</td>
-        </tr>
-        <tr>
-          <td>BL Buffer Size</td>
-          <td>No Data</td>
-          <td>No Data</td>
-        </tr>
+        <tr> <td>MCU Code</td> <td>No Data</td> <td>No Data</td>       </tr> 
+        <tr> <td>BL Type</td> <td>No Data</td> <td>No Data</td>        </tr> 
+        <tr> <td>Flash Page Size</td> <td>No Data</td> <td>No Data</td> </tr> 
+        <tr> <td>App FW Version</td> <td>No Data</td> <td>No Data</td> </tr> 
+        <tr> <td>Reserved</td> <td>No Data</td> <td>No Data</td>       </tr> 
+        <tr> <td>App Start Addr</td> <td>No Data</td> <td>No Data</td> </tr> 
+        <tr> <td>App End Addr</td> <td>No Data</td> <td>No Data</td>   </tr> 
+        <tr> <td>BL FW Version</td> <td>No Data</td> <td>No Data</td>  </tr> 
+        <tr> <td>BL Buffer Size</td> <td>No Data</td> <td>No Data</td> </tr> 
+        <tr> <td>BL Buffer Size</td> <td>No Data</td> <td>No Data</td> </tr> 
       </table>
     </div>
 

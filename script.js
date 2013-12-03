@@ -1,7 +1,9 @@
 var fs = require('fs');
 var hexParse = require('./intel-hex');
 var hex;
-var firmwareStartAddress = 0, firmwareEndAddress = 0;
+
+var firmwareStartAddress = 0,
+	firmwareEndAddress = 0;
 
 const FLASH_SIZE = 32768;
 const FLASH_PAGE_SIZE = 1024; // 1024
@@ -57,3 +59,52 @@ function openFileOption() {
 	document.getElementById("openFile").click();
 }
 
+var serialPort = require('serialport');
+
+function serialPortList() {
+	serialPort.list(function (err, ports) {
+		var coms = [];
+		var cnt = 0;
+		ports.forEach(function(port) {
+			coms[cnt++] = port.comName;
+		});
+		coms.sort();
+
+		var comPortInput = document.getElementById('comPort');
+		coms.forEach(function(com) {
+			var option = document.createElement('option');
+			option.text = com;
+			comPortInput.add(option, null);
+		});
+	});
+}
+
+window.onload = main();
+
+function main() {
+	serialPortList();
+}
+/*var serialport = require('serialport');
+var com = serialport.SerialPort;
+var serialPort = new com('COM4', {
+	baudrate: 115200,
+});
+*/
+
+function serialPortTesting() {
+	serialPortList();
+/*	console.log('COM port open test\n');
+	serialPort.write("OMG IT WORKS\r");
+	serialPort.on('open', function () {
+		console.log('open');
+		serialPort.on('data', function(data) {
+			console.log('data received: ' + data);
+		});
+		serialPort.write("ls\n", function(err, results) {
+			console.log('err ' + err);
+			console.log('results ' + results);
+		});
+
+	});
+*/
+}
