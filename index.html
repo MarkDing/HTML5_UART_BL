@@ -25,7 +25,7 @@
         <option value='None'>None</option>
       </select>
       
-      <button type='button' id='openComPort'style='float:right'>Open COM Port</button>
+      <button type='button' id='openComPort' onclick=serialPortOpen() style='float:right'>Open COM Port</button>
     </div>
     <div id='HexInfo' style='background-color:#EEEEEE;height:300px;width:300px;float:left'>
       <table border='1' cellspacing='0' id= 'infoBlock'>
@@ -46,9 +46,7 @@
     </div>
 
     <div id='content' style='background-color:#EEEEEE;height:300px;width:350px;float:left;'>
-      <textarea rows='18' cols='40' style='color:green'>
-Silicon Labs MCU Serial Bootloader DataSource v0.1.
-Please select a Hex file and then open the COM port.
+      <textarea id='textArea' rows='18' cols='40' style='color:green'>
       </textarea>
     </div>
 

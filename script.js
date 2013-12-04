@@ -59,10 +59,10 @@ function openFileOption() {
 	document.getElementById("openFile").click();
 }
 
-var serialPort = require('serialport');
+var serialport = require('serialport');
 
 function serialPortList() {
-	serialPort.list(function (err, ports) {
+	serialport.list(function (err, ports) {
 		var coms = [];
 		var cnt = 0;
 		ports.forEach(function(port) {
@@ -79,9 +79,34 @@ function serialPortList() {
 	});
 }
 
+function serialPortOpen() {
+	var comPortInput = document.getElementById('comPort');
+	var comSelected = comPortInput.options[comPortInput.selectedIndex].text;
+
+	console.log(comSelected);
+	var SerialPort = serialport.SerialPort;
+
+	var serialPort = new SerialPort(comSelected, {
+		baudrate: 115200
+	}, false);
+
+	serialPort.open(function (err) {
+		if (err) {
+			var textArea = document.getElementById('textArea');
+			var tmp = textArea.value + err + '\n';
+			textArea.value = tmp;
+			return;
+		}
+		serialPort.write('OMG IT WORKS\r');
+	});
+}
+
+
 window.onload = main();
 
 function main() {
+	var textArea = document.getElementById('textArea');
+	textArea.value = 'Silicon Labs MCU Serial Bootloader DataSource v0.1.textarea\nPlease select a Hex file and then open the COM port.\n';
 	serialPortList();
 }
 /*var serialport = require('serialport');
