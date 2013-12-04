@@ -1,5 +1,7 @@
 var fs = require('fs');
 var hexParse = require('./intel-hex');
+var serialport = require('serialport');
+
 var hex;
 
 var firmwareStartAddress = 0,
@@ -9,6 +11,11 @@ const FLASH_SIZE = 32768;
 const FLASH_PAGE_SIZE = 1024; // 1024
 const FLASH_PAGE_NUM = (FLASH_SIZE / FLASH_PAGE_SIZE);
 
+/**
+ * It display hex file info block into table. 
+ * @param  {[Buffer]} tmp [The flash page which contains info block]
+ * @return none
+ */
 function infoBlockDisplay(tmp) {
 	var infoTable = document.getElementById('infoBlock');
 	// MCU code
@@ -35,6 +42,12 @@ function infoBlockDisplay(tmp) {
 	infoTable.rows[7].cells[1].innerHTML = firmwareEndAddress;
 }
 
+/**
+ * it read hex file and call hexParse to parse it. It get firmware start address 
+ * and end address from return messages. 
+ * @param  files: selected file name
+ * @return none
+ */
 function handleFiles(files) {
 	fs.readFile(files[0].name, 'utf8', function(err,data) {
 		if (err) throw err;
@@ -59,8 +72,11 @@ function openFileOption() {
 	document.getElementById("openFile").click();
 }
 
-var serialport = require('serialport');
 
+/**
+ * It list all COM port in system, and add them in dropdown list as new option.
+ * @return none
+ */
 function serialPortList() {
 	serialport.list(function (err, ports) {
 		var coms = [];
@@ -79,6 +95,11 @@ function serialPortList() {
 	});
 }
 
+/**
+ * It checks dropdown list, get selected COM port, open the COM port, it output error message
+ * to text area when error occupied. 
+ * @return none
+ */
 function serialPortOpen() {
 	var comPortInput = document.getElementById('comPort');
 	var comSelected = comPortInput.options[comPortInput.selectedIndex].text;
@@ -104,11 +125,16 @@ function serialPortOpen() {
 
 window.onload = main();
 
+/**
+ * main entry of javascript, initialize nessary stuffs
+ * @return none
+ */
 function main() {
 	var textArea = document.getElementById('textArea');
 	textArea.value = 'Silicon Labs MCU Serial Bootloader DataSource v0.1.textarea\nPlease select a Hex file and then open the COM port.\n';
 	serialPortList();
 }
+
 /*var serialport = require('serialport');
 var com = serialport.SerialPort;
 var serialPort = new com('COM4', {
