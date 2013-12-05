@@ -1,15 +1,15 @@
 //Intel Hex record types
-const DATA = 0,
+var DATA = 0,
 	END_OF_FILE = 1,
 	EXT_SEGMENT_ADDR = 2,
 	START_SEGMENT_ADDR = 3,
 	EXT_LINEAR_ADDR = 4,
 	START_LINEAR_ADDR = 5;
 
-const EMPTY_VALUE = 0xFF;
+var EMPTY_VALUE = 0xFF;
 
-const FLASH_SIZE = 32768;
-const FLASH_PAGE_SIZE = 1024; // 1024
+var FLASH_SIZE = 8192;
+var FLASH_PAGE_SIZE = 512; // 1024
 
 /* intel_hex.parse(data)
 	`data` - Intel Hex file (string in ASCII format or Buffer Object)
@@ -36,7 +36,7 @@ exports.parse = function parseIntelHex(data, bufferSize) {
 		lineNum = 0, //Line number in the Intel Hex string
 		pos = 0; //Current position in the Intel Hex string
 	var flashPageInUse = new Array(FLASH_SIZE/FLASH_PAGE_SIZE);  // this array record which page in use by firmware
-	const SMALLEST_LINE = 11;
+	var SMALLEST_LINE = 11;
 	while(pos + SMALLEST_LINE <= data.length)
 	{
 		//Parse an entire line
@@ -93,7 +93,7 @@ exports.parse = function parseIntelHex(data, bufferSize) {
 				bufLength = Math.max(bufLength, absoluteAddress + dataLength);
 				break;
 			case END_OF_FILE:
-				if(dataLength != 0)
+				if(dataLength !== 0)
 					throw new Error("Invalid EOF record on line " +
 						lineNum + ".");
 				return {
@@ -104,25 +104,25 @@ exports.parse = function parseIntelHex(data, bufferSize) {
 				};
 				break;
 			case EXT_SEGMENT_ADDR:
-				if(dataLength != 2 || lowAddress != 0)
+				if(dataLength != 2 || lowAddress !== 0)
 					throw new Error("Invalid extended segment address record on line " +
 						lineNum + ".");
 				highAddress = parseInt(dataField, 16) << 4;
 				break;
 			case START_SEGMENT_ADDR:
-				if(dataLength != 4 || lowAddress != 0)
+				if(dataLength != 4 || lowAddress !== 0)
 					throw new Error("Invalid start segment address record on line " +
 						lineNum + ".");
 				startSegmentAddress = parseInt(dataField, 16);
 				break;
 			case EXT_LINEAR_ADDR:
-				if(dataLength != 2 || lowAddress != 0)
+				if(dataLength != 2 || lowAddress !== 0)
 					throw new Error("Invalid extended linear address record on line " +
 						lineNum + ".");
 				highAddress = parseInt(dataField, 16) << 16;
 				break;
 			case START_LINEAR_ADDR:
-				if(dataLength != 4 || lowAddress != 0)
+				if(dataLength != 4 || lowAddress !== 0)
 					throw new Error("Invalid start linear address record on line " +
 						lineNum + ".");
 				startLinearAddress = parseInt(dataField, 16);

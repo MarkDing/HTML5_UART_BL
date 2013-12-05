@@ -3,13 +3,16 @@ var hexParse = require('./intel-hex');
 var serialport = require('serialport');
 
 var hex;
+var textArea = document.getElementById('textArea');
+var infoTable = document.getElementById('infoBlock');
+var serialPort;
 
 var firmwareStartAddress = 0,
 	firmwareEndAddress = 0;
 
-const FLASH_SIZE = 32768;
-const FLASH_PAGE_SIZE = 1024; // 1024
-const FLASH_PAGE_NUM = (FLASH_SIZE / FLASH_PAGE_SIZE);
+var FLASH_SIZE = 8192;
+var FLASH_PAGE_SIZE = 512; // 1024
+var FLASH_PAGE_NUM = (FLASH_SIZE / FLASH_PAGE_SIZE);
 
 /**
  * It display hex file info block into table. 
@@ -17,7 +20,6 @@ const FLASH_PAGE_NUM = (FLASH_SIZE / FLASH_PAGE_SIZE);
  * @return none
  */
 function infoBlockDisplay(tmp) {
-	var infoTable = document.getElementById('infoBlock');
 	// MCU code
 	infoTable.rows[1].cells[1].innerHTML = '0x' + tmp[FLASH_PAGE_SIZE - 6].toString(16);
 	// BL type
@@ -60,7 +62,7 @@ function handleFiles(files) {
 				if (firmwareStartAddress === 0) {
 					firmwareStartAddress = '0x' + addr.toString(16);
 				}
-				firmwareEndAddress = '0x' + (addr + FLASH_PAGE_SIZE).toString(16) ;
+				firmwareEndAddress = '0x' + (addr + FLASH_PAGE_SIZE - 1).toString(16) ;
 				hex.data.copy(tmp, 0, addr, addr + FLASH_PAGE_SIZE);
 			}
 		}
@@ -107,21 +109,143 @@ function serialPortOpen() {
 	console.log(comSelected);
 	var SerialPort = serialport.SerialPort;
 
-	var serialPort = new SerialPort(comSelected, {
-		baudrate: 115200
+	serialPort = new SerialPort(comSelected, {
+		baudrate: 115200,
+		dataBits: 8,
+		parity: 'none',
+		stopBits: 1,
+		flowControl: false
 	}, false);
 
 	serialPort.open(function (err) {
+		var tmp = textArea.value;
 		if (err) {
-			var textArea = document.getElementById('textArea');
-			var tmp = textArea.value + err + '\n';
+			tmp = textArea.value + err + '\n';
 			textArea.value = tmp;
 			return;
 		}
-		serialPort.write('OMG IT WORKS\r');
+		tmp = tmp + 'Port opened: ' + comSelected + '\n';
+		tmp = tmp + 'Waiting for commands from the Master MCU...\n';
+		textArea.value = tmp;
+	});
+
+	serialPort.on('data', function(data) {
+		serialListener(data);
 	});
 }
 
+/* Data Source Commands */
+var SRC_CMD_GET_INFO        = 0x80;
+var SRC_CMD_GET_PAGE_INFO   = 0x81;
+var SRC_CMD_GET_PAGE        = 0x82;
+var SRC_CMD_DISP_TGT_INFO   = 0x83;
+var SRC_CMD_DISP_INFO_CODE  = 0x84;
+
+/* Data Source Response Codes */
+var SRC_RSP_OK              = [0x70];
+var SRC_RSP_ERROR           = [0x71];
+var SRC_RSP_DATA_END        = [0x72];
+var SRC_RSP_UNKNOWN_CMD     = [0x73];
+
+function serialListener(data) {
+	console.log('CMD:', data[0].toString(16));
+	switch(data[0]) {
+	case SRC_CMD_DISP_TGT_INFO:
+		// console.log('SRC_CMD_DISP_TGT_INFO');
+		targetInfoHandle(data);
+		break;
+	case SRC_CMD_GET_INFO:
+		// console.log('SRC_CMD_GET_INFO');
+		srcInfoHandle();
+		break;
+	case SRC_CMD_GET_PAGE_INFO:
+		srcGetPageInfo();
+		break;
+	default:
+		console.log('I cannot understand the message');
+		break;
+	}
+}
+
+function srcGetPageInfo() {
+	var SRC_CMD_GET_PAGE_INFO_RX_SZ = 6;
+}
+
+/**
+ * It send flash key to target
+ * @return None
+ */
+function srcInfoHandle() {
+	var SRC_CMD_GET_INFO_RX_SZ = 14;
+	/* Target only handle response code and flash key0 and key1*/
+	var txBuffer = [0x70, 0, 0, 0, 0, 0xA5, 0xF1, 0, 0, 0, 0, 0, 0, 0];
+	var tmp = textArea.value;
+	tmp += 'Starting the bootload process...\n\nReceived Command "GetHexImageInfo" [0x80]\n';
+	textArea.value = tmp;
+	serialPort.write(txBuffer);
+}
+
+/**
+ * Get target information and display it on table
+ * @param  data received from uart.
+ * @return none
+ */
+function targetInfoHandle(data) {
+	var TGT_BL_FW_INFOBLOCK_LENGTH = 19;
+	// console.log(data.length);
+	/* MCU code */
+	infoTable.rows[1].cells[2].innerHTML = '0x' + data[4].toString(16);
+	/* BL type */
+	if (data[5] == 1) {
+		infoTable.rows[2].cells[2].innerHTML = 'UART';
+	}
+	/* Flash page size */
+	if (data[6] == 2) {
+		infoTable.rows[3].cells[2].innerHTML = '1024';
+	} else if(data[6] == 1) {
+		infoTable.rows[3].cells[2].innerHTML = '512';
+	}
+	/* App FW Version */
+	infoTable.rows[4].cells[2].innerHTML = data[3].toString() + '.' + data[2].toString();
+	/* Reserved */
+	infoTable.rows[5].cells[2].innerHTML = '0x' + data[16].toString(16);
+	/* App Start Addr */
+	infoTable.rows[6].cells[2].innerHTML = '0x' + (data[12] * 65536 + data[11] * 256 + data[10]).toString(16);
+	/* App End Addr */
+	infoTable.rows[7].cells[2].innerHTML = '0x' + (data[15] * 65536 + data[14] * 256 + data[13]).toString(16);
+	/* BL FW Version */
+	infoTable.rows[8].cells[2].innerHTML = data[3].toString() + '.' + data[2].toString();
+	/* BL Buffer Size */
+	infoTable.rows[9].cells[2].innerHTML = 512;
+	/* CRC Type */
+	infoTable.rows[10].cells[2].innerHTML = 'CRC-16';
+
+	/* Send back response ok to target */
+	serialPort.write(SRC_RSP_OK);
+
+	/* Output message to text area*/
+	var tmp = textArea.value;
+	tmp += 'Received Command Display TargetInfo[0x83]';
+	tmp += 'Received Target MCU Information\nSee table for details.\n\n';
+	tmp += 'Click the "Update Application Firmware" button to continue\n\n\n';
+	textArea.value = tmp;
+}
+
+
+/*
+Starting the bootload process...
+
+Received Command 'GetHexImageInfo' [0x80]
+Received Command 'GetPageInfo' [0x81]
+Received Command 'GetPage' [0x82]
+Received Command 'GetPageInfo' [0x81]
+Received Command 'GetPage' [0x82]
+Received Command 'GetPageInfo' [0x81]
+
+Bootload process completed successfully!
+
+Waiting for commands from the Master MCU...
+*/
 
 window.onload = main();
 
@@ -135,27 +259,3 @@ function main() {
 	serialPortList();
 }
 
-/*var serialport = require('serialport');
-var com = serialport.SerialPort;
-var serialPort = new com('COM4', {
-	baudrate: 115200,
-});
-*/
-
-function serialPortTesting() {
-	serialPortList();
-/*	console.log('COM port open test\n');
-	serialPort.write("OMG IT WORKS\r");
-	serialPort.on('open', function () {
-		console.log('open');
-		serialPort.on('data', function(data) {
-			console.log('data received: ' + data);
-		});
-		serialPort.write("ls\n", function(err, results) {
-			console.log('err ' + err);
-			console.log('results ' + results);
-		});
-
-	});
-*/
-}
