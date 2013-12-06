@@ -14,6 +14,10 @@ var FLASH_SIZE = 8192;
 var FLASH_PAGE_SIZE = 512; // 1024
 var FLASH_PAGE_NUM = (FLASH_SIZE / FLASH_PAGE_SIZE);
 
+/* Record page address which store firmware */
+var pageAddress = [];
+var pageIdx = 0;
+var pageEnd = 0;
 /**
  * It display hex file info block into table. 
  * @param  {[Buffer]} tmp [The flash page which contains info block]
@@ -59,6 +63,7 @@ function handleFiles(files) {
 		for (i = 0; i < FLASH_PAGE_NUM; i++) {
 			if (hex.pageInUse[i] == 1) {
 				var addr = i * FLASH_PAGE_SIZE;
+				pageAddress[pageEnd++] = addr;
 				if (firmwareStartAddress === 0) {
 					firmwareStartAddress = '0x' + addr.toString(16);
 				}
@@ -66,6 +71,7 @@ function handleFiles(files) {
 				hex.data.copy(tmp, 0, addr, addr + FLASH_PAGE_SIZE);
 			}
 		}
+		/* We got correct firmware image from hex file */
 		infoBlockDisplay(tmp);
 	});
 }
@@ -105,8 +111,15 @@ function serialPortList() {
 function serialPortOpen() {
 	var comPortInput = document.getElementById('comPort');
 	var comSelected = comPortInput.options[comPortInput.selectedIndex].text;
+	var tmp = textArea.value;
 
 	console.log(comSelected);
+	/* We should open the hex file before open serial port*/
+	if (firmwareEndAddress === 0) {
+		textArea.value = tmp + 'Please open Hex file before open COM port\n';
+		return;
+	}
+
 	var SerialPort = serialport.SerialPort;
 
 	serialPort = new SerialPort(comSelected, {
@@ -118,7 +131,6 @@ function serialPortOpen() {
 	}, false);
 
 	serialPort.open(function (err) {
-		var tmp = textArea.value;
 		if (err) {
 			tmp = textArea.value + err + '\n';
 			textArea.value = tmp;
@@ -142,10 +154,10 @@ var SRC_CMD_DISP_TGT_INFO   = 0x83;
 var SRC_CMD_DISP_INFO_CODE  = 0x84;
 
 /* Data Source Response Codes */
-var SRC_RSP_OK              = [0x70];
-var SRC_RSP_ERROR           = [0x71];
-var SRC_RSP_DATA_END        = [0x72];
-var SRC_RSP_UNKNOWN_CMD     = [0x73];
+var SRC_RSP_OK              = 0x70;
+var SRC_RSP_ERROR           = 0x71;
+var SRC_RSP_DATA_END        = 0x72;
+var SRC_RSP_UNKNOWN_CMD     = 0x73;
 
 function serialListener(data) {
 	console.log('CMD:', data[0].toString(16));
@@ -161,14 +173,48 @@ function serialListener(data) {
 	case SRC_CMD_GET_PAGE_INFO:
 		srcGetPageInfo();
 		break;
+	case SRC_CMD_GET_PAGE:
+		srcGetPage();
+		break;
 	default:
 		console.log('I cannot understand the message');
 		break;
 	}
 }
 
+function srcGetPage() {
+	var SRC_CMD_GET_PAGE_RX_SZ = FLASH_PAGE_SIZE;
+	var tmp = new Buffer(FLASH_PAGE_SIZE);
+	var addr = pageAddress[pageIdx++];
+	hex.data.copy(tmp, 0, addr, addr + FLASH_PAGE_SIZE);
+
+	textArea.value += 'Received Command "GetPage" [0x82]\n';
+	var txBuffer = [SRC_RSP_OK];
+	serialPort.write(txBuffer);
+	serialPort.write(tmp);
+	serialPort.write(txBuffer);
+}
+
+
+/**
+ * It send page address to target
+ * @return none
+ */
 function srcGetPageInfo() {
 	var SRC_CMD_GET_PAGE_INFO_RX_SZ = 6;
+	var txBuffer = [SRC_RSP_OK, 0, 0, 0, 0, 0];
+	txBuffer[1] = pageAddress[pageIdx] % 256;
+	txBuffer[2] = pageAddress[pageIdx] /256;
+
+	textArea.value += 'Received Command "GetPageInfo" [0x81]\n';
+
+	if (pageIdx == pageEnd) {
+		pageIdx = 0;
+		txBuffer[0] = SRC_RSP_DATA_END;
+		textArea.value += 'Bootload process completed successfully!\n';
+		textArea.value += 'Waiting for commands from the Master MCU...\n\n';
+	}
+	serialPort.write(txBuffer);
 }
 
 /**
@@ -178,10 +224,8 @@ function srcGetPageInfo() {
 function srcInfoHandle() {
 	var SRC_CMD_GET_INFO_RX_SZ = 14;
 	/* Target only handle response code and flash key0 and key1*/
-	var txBuffer = [0x70, 0, 0, 0, 0, 0xA5, 0xF1, 0, 0, 0, 0, 0, 0, 0];
-	var tmp = textArea.value;
-	tmp += 'Starting the bootload process...\n\nReceived Command "GetHexImageInfo" [0x80]\n';
-	textArea.value = tmp;
+	var txBuffer = [SRC_RSP_OK, 0, 0, 0, 0, 0xA5, 0xF1, 0, 0, 0, 0, 0, 0, 0];
+	textArea.value += 'Starting the bootload process...\nReceived Command "GetHexImageInfo" [0x80]\n';
 	serialPort.write(txBuffer);
 }
 
@@ -221,13 +265,14 @@ function targetInfoHandle(data) {
 	infoTable.rows[10].cells[2].innerHTML = 'CRC-16';
 
 	/* Send back response ok to target */
-	serialPort.write(SRC_RSP_OK);
+	var txBuffer = [SRC_RSP_OK];
+	serialPort.write(txBuffer);
 
 	/* Output message to text area*/
 	var tmp = textArea.value;
-	tmp += 'Received Command Display TargetInfo[0x83]';
+	tmp += 'Received Command "Display TargetInfo" [0x83]\n';
 	tmp += 'Received Target MCU Information\nSee table for details.\n\n';
-	tmp += 'Click the "Update Application Firmware" button to continue\n\n\n';
+	tmp += 'Click the "Update Application Firmware" button to continue\n\n';
 	textArea.value = tmp;
 }
 
