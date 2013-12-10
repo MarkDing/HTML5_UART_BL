@@ -37,6 +37,7 @@ Once installation completed, restart Sublime Text2, we will see Package Control 
 #### a) jsFormat
 
 Sometimes we got JavaScript code which has been compressed. Like below.
+
 ![image001.png](https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image001.png)<br>
 It is no convenient to understand the code, press CTRL+ALT+F, the code has been formatted with beautiful form.
 
@@ -191,6 +192,7 @@ Get reference from:
 
 http://www.silabs.com/Support%20Documents/TechnicalDocs/AN778.pdf
 http://www.silabs.com/Support%20Documents/Software/AN778SW.zip
+
 ![image016.png](https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image016.png)<br>
 
 ### UI implementation
@@ -200,6 +202,7 @@ There are four buttons, two check boxes, six drop down lists, one table, and one
 a). **Add drop down lists**
 
 Get reference from http://www.w3schools.com/tags/tag_select.asp.
+
 ![image017.png](https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image017.png)<br>
 The effort shows close to C# appearance.
 
@@ -208,6 +211,7 @@ The effort shows close to C# appearance.
 b). **Add button**
 
 Get reference from http://www.w3schools.com/tags/tag_button.asp
+
 ![image019.png](https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image019.png)<br>
 The effort looks good.
 
@@ -216,6 +220,7 @@ The effort looks good.
 c). **Add Tables**
 
 Get reference from http://www.w3schools.com/html/html_tables.asp
+
 ![image022.png](https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image022.png)<br>
 The effort looks good too.
 
@@ -224,6 +229,7 @@ The effort looks good too.
 d). **Checkbox**
 
 Get reference from http://www.w3schools.com/jsref/prop_checkbox_checked.asp
+
 ![image024.png](https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image024.png)<br>
 The effort looks good.
 
@@ -232,6 +238,7 @@ The effort looks good.
 e). **Text area**
 
 Get reference from http://www.w3schools.com/tags/tag_textarea.asp
+
 ![image026.png](https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image026.png)<br>
 The effort looks good too.
 
@@ -258,6 +265,7 @@ Add input tag to for file upload, the id is “openFile”, the id can be access
 
 ![image030.png](https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image030.png)<br>
 And then change button tag of “Select Hex File(s)”, id is “openHexFile”, onClick event handler function is openFileOption().
+
 ![image031.png](https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image031.png)<br>
 
 *  In script.js
@@ -273,6 +281,7 @@ function handleFiles(files) {
 }
 ```
 * Press Ctrl+B, click on button “Select Hex File(s)”, we can see a file dialog appeared.
+
 ![image032.png](https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image032.png)<br>
 
 b).  **Read file contents**
@@ -315,6 +324,7 @@ Get reference from https://github.com/bminer/intel-hex.js
 *  **User firmware structure:**
 
 The user firmware application structure look like below. The user firmware start address from 0x400, and at end of user firmware area, there is application info block which record the user firmware information, something like App start Address, App End Address, BL type, etc.
+
 ![image036.png](https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image036.png)<br>
 In our example, the user application firmware start address is 0x400, however, the application info block address at 0x77F5. That means two pages are needed for this firmware, and a lot of pages bare between first occurred page and last occurred page.
 
