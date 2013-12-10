@@ -39,12 +39,19 @@ Once installation completed, restart Sublime Text2, we will see Package Control 
 Sometimes we got JavaScript code which has been compressed. Like below.
 ![image001.png](https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image001.png)<br>
 It is no convenient to understand the code, press CTRL+ALT+F, the code has been formatted with beautiful form.
+
 ![image002.png](https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image002.png)<br>
+
 #### b) DocBlockr
+
 Type /** and press enter, it will automatically generate doxygen compatible function description.
+
 ![image003.png](https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image003.png)<br>
+
 #### c) SublimeLinter
+
 Automatically check programming language grammar error. Below example shows missing semicolon case, it shows a red exclamation mark on left of the line.  And display the error information in status bar at bottom of the window.
+
 ![image004.png](https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image004.png)<br>
 ![image005.png](https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image005.png)<br>
 
