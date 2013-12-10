@@ -19,7 +19,7 @@ var pageAddress = [];
 var pageIdx = 0;
 var pageEnd = 0;
 /**
- * It display hex file info block into table. 
+ * It display hex file info block into table.
  * @param  {[Buffer]} tmp [The flash page which contains info block]
  * @return none
  */
@@ -33,12 +33,12 @@ function infoBlockDisplay(tmp) {
 	// Flash page size
 	if (tmp[FLASH_PAGE_SIZE - 8] == 2) {
 		infoTable.rows[3].cells[1].innerHTML = '1024';
-	} else if(tmp[FLASH_PAGE_SIZE - 8] == 1) {
+	} else if (tmp[FLASH_PAGE_SIZE - 8] == 1) {
 		infoTable.rows[3].cells[1].innerHTML = '512';
 	}
 	// App FW Version
 	var ver_high = tmp[FLASH_PAGE_SIZE - 10].toString();
-	var ver_low  = tmp[FLASH_PAGE_SIZE - 9].toString();
+	var ver_low = tmp[FLASH_PAGE_SIZE - 9].toString();
 	infoTable.rows[4].cells[1].innerHTML = ver_high + '.' + ver_low;
 	// Reserved
 	infoTable.rows[5].cells[1].innerHTML = '0x' + tmp[FLASH_PAGE_SIZE - 11].toString(16);
@@ -49,13 +49,13 @@ function infoBlockDisplay(tmp) {
 }
 
 /**
- * it read hex file and call hexParse to parse it. It get firmware start address 
- * and end address from return messages. 
+ * it read hex file and call hexParse to parse it. It get firmware start address
+ * and end address from return messages.
  * @param  files: selected file name
  * @return none
  */
 function handleFiles(files) {
-	fs.readFile(files[0].name, 'utf8', function(err,data) {
+	fs.readFile(files[0].name, 'utf8', function (err, data) {
 		if (err) throw err;
 		hex = hexParse.parse(data);
 
@@ -67,7 +67,7 @@ function handleFiles(files) {
 				if (firmwareStartAddress === 0) {
 					firmwareStartAddress = '0x' + addr.toString(16);
 				}
-				firmwareEndAddress = '0x' + (addr + FLASH_PAGE_SIZE - 1).toString(16) ;
+				firmwareEndAddress = '0x' + (addr + FLASH_PAGE_SIZE - 1).toString(16);
 				hex.data.copy(tmp, 0, addr, addr + FLASH_PAGE_SIZE);
 			}
 		}
@@ -89,13 +89,13 @@ function serialPortList() {
 	serialport.list(function (err, ports) {
 		var coms = [];
 		var cnt = 0;
-		ports.forEach(function(port) {
+		ports.forEach(function (port) {
 			coms[cnt++] = port.comName;
 		});
 		coms.sort();
 
 		var comPortInput = document.getElementById('comPort');
-		coms.forEach(function(com) {
+		coms.forEach(function (com) {
 			var option = document.createElement('option');
 			option.text = com;
 			comPortInput.add(option, null);
@@ -105,7 +105,7 @@ function serialPortList() {
 
 /**
  * It checks dropdown list, get selected COM port, open the COM port, it output error message
- * to text area when error occupied. 
+ * to text area when error occupied.
  * @return none
  */
 function serialPortOpen() {
@@ -141,27 +141,27 @@ function serialPortOpen() {
 		textArea.value = tmp;
 	});
 
-	serialPort.on('data', function(data) {
+	serialPort.on('data', function (data) {
 		serialListener(data);
 	});
 }
 
 /* Data Source Commands */
-var SRC_CMD_GET_INFO        = 0x80;
-var SRC_CMD_GET_PAGE_INFO   = 0x81;
-var SRC_CMD_GET_PAGE        = 0x82;
-var SRC_CMD_DISP_TGT_INFO   = 0x83;
-var SRC_CMD_DISP_INFO_CODE  = 0x84;
+var SRC_CMD_GET_INFO = 0x80;
+var SRC_CMD_GET_PAGE_INFO = 0x81;
+var SRC_CMD_GET_PAGE = 0x82;
+var SRC_CMD_DISP_TGT_INFO = 0x83;
+var SRC_CMD_DISP_INFO_CODE = 0x84;
 
 /* Data Source Response Codes */
-var SRC_RSP_OK              = 0x70;
-var SRC_RSP_ERROR           = 0x71;
-var SRC_RSP_DATA_END        = 0x72;
-var SRC_RSP_UNKNOWN_CMD     = 0x73;
+var SRC_RSP_OK = 0x70;
+var SRC_RSP_ERROR = 0x71;
+var SRC_RSP_DATA_END = 0x72;
+var SRC_RSP_UNKNOWN_CMD = 0x73;
 
 function serialListener(data) {
 	console.log('CMD:', data[0].toString(16));
-	switch(data[0]) {
+	switch (data[0]) {
 	case SRC_CMD_DISP_TGT_INFO:
 		// console.log('SRC_CMD_DISP_TGT_INFO');
 		targetInfoHandle(data);
@@ -204,7 +204,7 @@ function srcGetPageInfo() {
 	var SRC_CMD_GET_PAGE_INFO_RX_SZ = 6;
 	var txBuffer = [SRC_RSP_OK, 0, 0, 0, 0, 0];
 	txBuffer[1] = pageAddress[pageIdx] % 256;
-	txBuffer[2] = pageAddress[pageIdx] /256;
+	txBuffer[2] = pageAddress[pageIdx] / 256;
 
 	textArea.value += 'Received Command "GetPageInfo" [0x81]\n';
 
@@ -246,7 +246,7 @@ function targetInfoHandle(data) {
 	/* Flash page size */
 	if (data[6] == 2) {
 		infoTable.rows[3].cells[2].innerHTML = '1024';
-	} else if(data[6] == 1) {
+	} else if (data[6] == 1) {
 		infoTable.rows[3].cells[2].innerHTML = '512';
 	}
 	/* App FW Version */
@@ -303,4 +303,3 @@ function main() {
 	textArea.value = 'Silicon Labs MCU Serial Bootloader DataSource v0.1.textarea\nPlease select a Hex file and then open the COM port.\n';
 	serialPortList();
 }
-
