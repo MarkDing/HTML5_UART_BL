@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Html5 uart bl : HTML5 base UART bootloader updater software in embedded system design" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Html5 uart bl</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/MarkDing/HTML5_UART_BL">View on GitHub</a>
+
+          <h1 id="project_title">Html5 uart bl</h1>
+          <h2 id="project_tagline">HTML5 base UART bootloader updater software in embedded system design</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/MarkDing/HTML5_UART_BL/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/MarkDing/HTML5_UART_BL/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>
+<a name="silicon-labs-mcu-serial-bootloader-data-source" class="anchor" href="#silicon-labs-mcu-serial-bootloader-data-source"><span class="octicon octicon-link"></span></a>Silicon Labs MCU serial Bootloader Data Source</h2>
+
+<p>This is a basic demo that demonstrates ability of HTML5 and JavaScript to make a desktop application.</p>
+
+<p>Here we pickup and example for 8 bit MCU bootloader download software. 
+Which we can get more information from silabs UART bootloader solution:</p>
+
+<p><a href="http://www.silabs.com/Support%20Documents/TechnicalDocs/AN778.pdf">http://www.silabs.com/Support%20Documents/TechnicalDocs/AN778.pdf</a><br><a href="http://www.silabs.com/Support%20Documents/Software/AN778SW.zip">http://www.silabs.com/Support%20Documents/Software/AN778SW.zip</a></p>
+
+<p>We use HTML5, JavaScript, Node-Webkit to setup the PC application which act as original C# software.</p>
+
+<h2>
+<a name="introduction" class="anchor" href="#introduction"><span class="octicon octicon-link"></span></a>Introduction</h2>
+
+<p>In embedded system design, we need to design desktop application to communicate with embedded devices. It is normally written by C++, C#, or TCL. And it is limited with OS environment. Developer needs to design different software version for Windows, Mac OS and Linux. For those cross platform requirement, we have better solution on it. Browser is common thing on various OS, just follow the HTML5 standard. Design a desktop application with HTML5, we can achieve the cross platform target, it can runs on Windows, Linux and Mac. The programing languages are HTML5, JavaScript and CSS. In the below section, we will investigate it in detail on how to design a HTML5 desktop application in embedded system design.</p>
+
+<h2>
+<a name="sublime-text-2" class="anchor" href="#sublime-text-2"><span class="octicon octicon-link"></span></a>Sublime Text 2</h2>
+
+<p>Sublime is wonderful text editor which support multi-platform.  It is recommended to install it before we start looking into HTML5 things.</p>
+
+<h3>
+<a name="install-the-sublime-text-2" class="anchor" href="#install-the-sublime-text-2"><span class="octicon octicon-link"></span></a>Install the Sublime Text 2</h3>
+
+<p>Go to <a href="http://www.sublimetext.com/2">http://www.sublimetext.com/2</a>, download Sublime Text 2 according your OS environment.</p>
+
+<ul>
+<li>OS X (OS X 10.6 or later is required)</li>
+<li>Windows - also available as a portable version</li>
+<li>Windows 64 bit - also available as a portable version</li>
+<li>Linux 32 bit</li>
+<li>Linux 64 bit</li>
+</ul><h3>
+<a name="install-package-control" class="anchor" href="#install-package-control"><span class="octicon octicon-link"></span></a>Install package control</h3>
+
+<p>This helps us easier to install other plugin. Press CTRL+ ~ to console displayed, past below scripts in console and press ENTER.</p>
+
+<blockquote>
+<p>import urllib2,os;pf='Package Control.sublime-package';ipp=sublime.installed_packages_path();os.makedirs(ipp) if not os.path.exists(ipp) else None;open(os.path.join(ipp,pf),'wb').write(urllib2.urlopen('<a href="http://sublime.wbond.net/'+pf.replace(">http://sublime.wbond.net/'+pf.replace(</a>' ','%20')).read())</p>
+</blockquote>
+
+<p>Once installation completed, restart Sublime Text2, we will see Package Control in Preference -&gt; Package Settings</p>
+
+<h3>
+<a name="plugin-install" class="anchor" href="#plugin-install"><span class="octicon octicon-link"></span></a>Plugin install</h3>
+
+<h4>
+<a name="a-jsformat" class="anchor" href="#a-jsformat"><span class="octicon octicon-link"></span></a>a) jsFormat</h4>
+
+<p>Sometimes we got JavaScript code which has been compressed. Like below.</p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image001.png" alt="image001.png"><br>
+It is no convenient to understand the code, press CTRL+ALT+F, the code has been formatted with beautiful form.</p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image002.png" alt="image002.png"><br></p>
+
+<h4>
+<a name="b-docblockr" class="anchor" href="#b-docblockr"><span class="octicon octicon-link"></span></a>b) DocBlockr</h4>
+
+<p>Type /** and press enter, it will automatically generate doxygen compatible function description.</p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image003.png" alt="image003.png"><br></p>
+
+<h4>
+<a name="c-sublimelinter" class="anchor" href="#c-sublimelinter"><span class="octicon octicon-link"></span></a>c) SublimeLinter</h4>
+
+<p>Automatically check programming language grammar error. Below example shows missing semicolon case, it shows a red exclamation mark on left of the line.  And display the error information in status bar at bottom of the window.</p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image004.png" alt="image004.png"><br><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image005.png" alt="image005.png"><br></p>
+
+<h2>
+<a name="html5" class="anchor" href="#html5"><span class="octicon octicon-link"></span></a>HTML5</h2>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image007.png" alt="image007.png"><br></p>
+
+<h3>
+<a name="introduction-1" class="anchor" href="#introduction-1"><span class="octicon octicon-link"></span></a>Introduction</h3>
+
+<p>HTML5 is a markup language used for structuring and presenting content for the World Wide Web and a core technology of the Internet. It is the fifth revision of the HTML standard.</p>
+
+<p>In addition to specifying markup, HTML5 specifies scripting application programming Interfaces (APIs) that can be used with JavaScript. Existing document object model (DOM) interfaces are extended and de facto features documented. There are also new APIs, such as:</p>
+
+<p>HTML5 related APIs.</p>
+
+<ul>
+<li>The canvas element for immediate mode 2D drawing. See Canvas 2D API Specification 1.0 specification</li>
+<li>Timed media playback</li>
+<li>Offline Web Applications</li>
+<li>Document editing</li>
+<li>Drag-and-drop</li>
+<li>Cross-document messaging</li>
+<li>Browser history management</li>
+<li>MIME type and protocol handler registration</li>
+<li>Microdata</li>
+<li>Web Storage, a key-value pair storage framework that provides behaviour similar to cookies but with larger storage capacity and improved API.</li>
+</ul><h3>
+<a name="useful-stuffs" class="anchor" href="#useful-stuffs"><span class="octicon octicon-link"></span></a>Useful stuffs</h3>
+
+<p><a href="http://diveintohtml5.info/canvas.html">http://diveintohtml5.info/canvas.html</a> <br><a href="http://www.w3schools.com/html/html5_intro.asp">http://www.w3schools.com/html/html5_intro.asp</a></p>
+
+<h2>
+<a name="javascript" class="anchor" href="#javascript"><span class="octicon octicon-link"></span></a>JavaScript</h2>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image009.png" alt="image009.png"><br></p>
+
+<h3>
+<a name="introduction-2" class="anchor" href="#introduction-2"><span class="octicon octicon-link"></span></a>Introduction</h3>
+
+<p>JavaScript (JS) is an interpreted computer programming language. As part of web browsers, implementations allow client-side scripts to interact with the user, control the browser, communicate asynchronously, and alter the document content that is displayed. It has also become common in server-side programming, game development and the creation of desktop applications.</p>
+
+<p>JavaScript is a prototype-based scripting language with dynamic typing and has first-class functions. Its syntax was influenced by C. JavaScript copies many names and naming conventions from Java, but the two languages are otherwise unrelated and have very different semantics. The key design principles within JavaScript are taken from the Self and Scheme programming languages. It is a multi-paradigm language, supporting object-oriented, imperative, and functional programming styles.</p>
+
+<p>JavaScript was originally developed by Brendan Eich in Netscape.</p>
+
+<p>Although it was developed under the name Mocha, the language was officially called LiveScript when it first shipped in beta releases of Netscape Navigator 2.0 in September 1995, but it was renamed JavaScript when it was deployed in the Netscape browser version 2.0B3.</p>
+
+<p>The change of name from LiveScript to JavaScript roughly coincided with Netscape adding support for Java technology in its Netscape Navigator web browser. The final choice of name caused confusion, giving the impression that the language was a spin-off of the Java programming language, and the choice has been characterized by many as a marketing ploy by Netscape to give JavaScript the cachet of what was then the hot new web programming language.</p>
+
+<h2>
+<a name="nodejs" class="anchor" href="#nodejs"><span class="octicon octicon-link"></span></a>Node.js</h2>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image010.png" alt="image010.png"><br></p>
+
+<h3>
+<a name="introduction-3" class="anchor" href="#introduction-3"><span class="octicon octicon-link"></span></a>Introduction</h3>
+
+<p>Node.js is a software platform that is used to build scalable network (especially server-side) applications. Node.js utilizes JavaScript as its scripting language, and achieves high throughput via non-blocking I/O and a single-threaded event loop.</p>
+
+<p>Node.js contains a built-in HTTP server library, making it possible to run a web server without the use of external software, such as Apache or Lighttpd, and allowing more control of how the web server works.</p>
+
+<p>Node.js was created by Ryan Dahl starting in 2009. Its development and maintenance is sponsored by Joyent.</p>
+
+<p>Node.js is a packaged compilation of Google's V8 JavaScript engine, the platform abstraction layer, and a core library, which is itself primarily written in JavaScript.</p>
+
+<p>Dahl's original goal was to create web sites with push capabilities as seen in web applications like Gmail. After trying solutions in several other programming languages he chose JavaScript because of the lack of an existing I/O API. This allowed him to define a convention of non-blocking, event-driven I/O.</p>
+
+<h3>
+<a name="useful-stuffs-1" class="anchor" href="#useful-stuffs-1"><span class="octicon octicon-link"></span></a>Useful stuffs</h3>
+
+<ul>
+<li>Download Node.js from <a href="http://nodejs.org/">http://nodejs.org/</a> <br>
+It support Windows, Macintosh and Lnux. <br><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image011.png" alt="image011.png"><br>
+Node.js is released under the MIT license, and bundles other liberally licensed OSS components.</li>
+<li>A good place to study node.js, <a href="http://www.nodebeginner.org/">http://www.nodebeginner.org/</a> <br>
+</li>
+</ul><h2>
+<a name="webkit" class="anchor" href="#webkit"><span class="octicon octicon-link"></span></a>Webkit</h2>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image012.png" alt="image012.png"><br></p>
+
+<h3>
+<a name="introduction-4" class="anchor" href="#introduction-4"><span class="octicon octicon-link"></span></a>Introduction</h3>
+
+<p>Node-webkit is an app runtime based on Chromium and node.js. You can write native apps in HTML and JavaScript with node-webkit. It also lets you call Node.js modules directly from the DOM and enables a new way of writing native applications with all Web technologies.</p>
+
+<h3>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h3>
+
+<ul>
+<li>Apps written in modern HTML5, CSS3, JS and WebGL.</li>
+<li>Complete support for Node.js APIs and all its third party modules.</li>
+<li>Good performance: Node and WebKit runs in the same thread: Function calls are made straightforward; objects are in the same heap and can just reference each other;</li>
+<li>Easy to package and distribute apps.</li>
+<li>Available on Linux, Mac OSX and Windows.</li>
+</ul><h3>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h3>
+
+<ol>
+<li>Download latest version from <a href="https://github.com/rogerwang/node-webkit">https://github.com/rogerwang/node-webkit</a>
+</li>
+<li>Extract the package and copy all files into directory C:\Program Files\node-webkit</li>
+<li><p>Configure build and debugging setting in Sublime Text2  for Node-webkit Windows. </p></li>
+</ol><ul>
+<li>Select Tools-&gt;Build system-&gt;New Build System, it opens a new file named “untiled.sublime-build”.<br>
+</li>
+<li>Copy below code into untiled.sublime-build and save it as “Node-webkit.sublime-build” <br>
+</li>
+</ul><div class="highlight highlight-json"><pre><span class="p">{</span>
+    <span class="nt">"cmd"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"nw.exe"</span><span class="p">,</span> <span class="s2">"--enable-logging"</span><span class="p">,</span> <span class="s2">"${project_path:${file_path}}"</span><span class="p">],</span>
+    <span class="nt">"working_dir"</span><span class="p">:</span> <span class="s2">"${project_path:${file_path}}"</span><span class="p">,</span>
+    <span class="nt">"path"</span><span class="p">:</span> <span class="s2">"C:/Program Files/node-webkit/"</span>
+<span class="p">}</span>
+</pre></div>
+
+<ul>
+<li>
+<p>Press Ctrl+B to build your project.</p>
+
+<p>Please find more information from official website. 
+<a href="https://github.com/rogerwang/node-webkit/wiki/Debugging-with-Sublime-Text-2">https://github.com/rogerwang/node-webkit/wiki/Debugging-with-Sublime-Text-2</a></p>
+</li>
+</ul><h3>
+<a name="desktop-application-example" class="anchor" href="#desktop-application-example"><span class="octicon octicon-link"></span></a>Desktop application example</h3>
+
+<h4>
+<a name="hello-world-example" class="anchor" href="#hello-world-example"><span class="octicon octicon-link"></span></a>Hello World example</h4>
+
+<ol>
+<li>Create index.html</li>
+</ol><p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image013.png" alt="image013.png"><br>
+2. Create package.json</p>
+
+<div class="highlight highlight-json"><pre><span class="p">{</span>
+    <span class="nt">"name"</span><span class="p">:</span> <span class="s2">"nw-demo"</span><span class="p">,</span>
+    <span class="nt">"main"</span><span class="p">:</span> <span class="s2">"index.html"</span>
+<span class="p">}</span>
+</pre></div>
+
+<ol>
+<li>Run project by pressing Ctrl+B,  it shows below window.</li>
+</ol><p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image014.png" alt="image014.png"><br></p>
+
+<h4>
+<a name="official-demo-code" class="anchor" href="#official-demo-code"><span class="octicon octicon-link"></span></a>Official demo code</h4>
+
+<p>There are several example codes in <a href="https://github.com/zcbenz/nw-sample-apps">https://github.com/zcbenz/nw-sample-apps</a> <br>
+Here is snap of one example code “menus”</p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image015.png" alt="image015.png"><br></p>
+
+<h2>
+<a name="real-desktop-application-example" class="anchor" href="#real-desktop-application-example"><span class="octicon octicon-link"></span></a>Real Desktop application example</h2>
+
+<p>Now we can start working on a real application examples. According the procedure, we can familiar with desktop application development with Node-webkit.
+We have an F33x UART bootloader PC application, written by C#, the user interface shows below, let us make same one with HTML5 and JavaScript.
+Get reference from:</p>
+
+<p><a href="http://www.silabs.com/Support%20Documents/TechnicalDocs/AN778.pdf">http://www.silabs.com/Support%20Documents/TechnicalDocs/AN778.pdf</a>
+<a href="http://www.silabs.com/Support%20Documents/Software/AN778SW.zip">http://www.silabs.com/Support%20Documents/Software/AN778SW.zip</a></p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image016.png" alt="image016.png"><br></p>
+
+<h3>
+<a name="ui-implementation" class="anchor" href="#ui-implementation"><span class="octicon octicon-link"></span></a>UI implementation</h3>
+
+<p>There are four buttons, two check boxes, six drop down lists, one table, and one text area.</p>
+
+<p>a). <strong>Add drop down lists</strong></p>
+
+<p>Get reference from <a href="http://www.w3schools.com/tags/tag_select.asp">http://www.w3schools.com/tags/tag_select.asp</a>.</p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image017.png" alt="image017.png"><br>
+The effort shows close to C# appearance.</p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image018.png" alt="image018.png"><br></p>
+
+<p>b). <strong>Add button</strong></p>
+
+<p>Get reference from <a href="http://www.w3schools.com/tags/tag_button.asp">http://www.w3schools.com/tags/tag_button.asp</a></p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image019.png" alt="image019.png"><br>
+The effort looks good.</p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image020.png" alt="image020.png"><br></p>
+
+<p>c). <strong>Add Tables</strong></p>
+
+<p>Get reference from <a href="http://www.w3schools.com/html/html_tables.asp">http://www.w3schools.com/html/html_tables.asp</a></p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image022.png" alt="image022.png"><br>
+The effort looks good too.</p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image023.png" alt="image023.png"><br></p>
+
+<p>d). <strong>Checkbox</strong></p>
+
+<p>Get reference from <a href="http://www.w3schools.com/jsref/prop_checkbox_checked.asp">http://www.w3schools.com/jsref/prop_checkbox_checked.asp</a></p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image024.png" alt="image024.png"><br>
+The effort looks good.</p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image025.png" alt="image025.png"><br></p>
+
+<p>e). <strong>Text area</strong></p>
+
+<p>Get reference from <a href="http://www.w3schools.com/tags/tag_textarea.asp">http://www.w3schools.com/tags/tag_textarea.asp</a></p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image026.png" alt="image026.png"><br>
+The effort looks good too.</p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image027.png" alt="image027.png"><br></p>
+
+<p>f). <strong>Final display effort</strong></p>
+
+<p>Get reference from <a href="http://www.w3schools.com/html/html_examples.asp">http://www.w3schools.com/html/html_examples.asp</a> <br>
+After fine tune UI layout, the final appearance looks like below snapshot.</p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image028.png" alt="image028.png"><br></p>
+
+<h3>
+<a name="file-system-access" class="anchor" href="#file-system-access"><span class="octicon octicon-link"></span></a>File system access</h3>
+
+<p>We need open hex file from explorer window and read file contents.</p>
+
+<p>a). <strong>Open file Dialog</strong></p>
+
+<p>Here we want click on button “Select Hex File(s)”, it should display file open dialog to select input file. Here we need start coding JavaScript to achieve file access function. 
+Get reference from <a href="http://www.w3schools.com/jsref/dom_obj_fileupload.asp">http://www.w3schools.com/jsref/dom_obj_fileupload.asp</a></p>
+
+<ul>
+<li>In index.html</li>
+</ul><p>Add input tag to for file upload, the id is “openFile”, the id can be access by JavaScript code. And set it not display style. Also add script tag to execute script.js.</p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image030.png" alt="image030.png"><br>
+And then change button tag of “Select Hex File(s)”, id is “openHexFile”, onClick event handler function is openFileOption().</p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image031.png" alt="image031.png"><br></p>
+
+<ul>
+<li> In script.js</li>
+</ul><p>Add openFileOption(), notice getElementById() with id ‘openFile’, which defined in indel.html input TAG. And with onClick event of input tag, it call handleFiles, which print out selected file name on console.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">function</span> <span class="nx">openFileOption</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"openFile"</span><span class="p">).</span><span class="nx">click</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">handleFiles</span><span class="p">(</span><span class="nx">files</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">files</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span>
+         <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">files</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<ul>
+<li>Press Ctrl+B, click on button “Select Hex File(s)”, we can see a file dialog appeared.</li>
+</ul><p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image032.png" alt="image032.png"><br></p>
+
+<p>b).  <strong>Read file contents</strong></p>
+
+<p>Here we need node.js to access local storage file. <br>
+Get reference from <a href="http://nodejs.org/api/fs.html#fs_fs_readfile_filename_options_callback">http://nodejs.org/api/fs.html#fs_fs_readfile_filename_options_callback</a> <br>
+In script.js</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'fs'</span><span class="p">);</span>
+<span class="kd">function</span> <span class="nx">handleFiles</span><span class="p">(</span><span class="nx">files</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">name</span><span class="p">,</span> <span class="s1">'utf8'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+         <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
+         <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Press Ctrl+B, click on button ”Select Hex File(s)”, select Sample_User_Application.hex file, and then we can see Hex file contents output in console.</p>
+
+<blockquote>
+<p>[3928:1120/153906:INFO:CONSOLE(6)]"":03040000020447AC\r\n:0C044700787FE4F6D8FD758107020433CD\r\n:1004330053D9BF1204037FB07E63120415D2AFE415\r\n:04044300F5A780FE9B\r\n:0D040300AFA775A70F75E24043AF048FA7A8\r\n:0104100022C9\r\n:10041500ADA775A70FE4F5C8C39FFFE49EF5CB8F85\r\n:0D042500CA74FFF5CDF5CCD2ADD2CA8DA7BB\r\n:0104320022A7\r\n:030412000204538E\r\n:05045300C2CFB2B2327D\r\n:0B77F500250101020136071BA5C23D63\r\n:00000001FF\r\n"",</p>
+</blockquote>
+
+<h3>
+<a name="hex-file-analysis" class="anchor" href="#hex-file-analysis"><span class="octicon octicon-link"></span></a>Hex file analysis</h3>
+
+<p>a). <strong>Introduction</strong></p>
+
+<p>Intel HEX is a file format for conveying binary information for applications like programming microcontrollers, EPROMs, and other kinds of chips. The format is a text file, with each line containing hexadecimal values encoding a sequence of data and their starting offset or absolute address.
+Each line of Intel HEX file consists of six parts:</p>
+
+<ul>
+<li>
+<strong>Start code</strong>, one character, an ASCII colon ':'.</li>
+<li>
+<strong>Byte count</strong>, two hex digits, a number of bytes (hex digit pairs) in the data field. 16 (0x10) or 32 (0x20) bytes of data are the usual compromise values between line length and address overhead.</li>
+<li>
+<strong>Address</strong>, four hex digits, a 16-bit address of the beginning of the memory position for the data. Limited to 64 kilobytes, the limit is worked around by specifying higher bits via additional record types.</li>
+<li>
+<strong>Record type</strong>, two hex digits, 00 to 05, defining the type of the data field.</li>
+<li>
+<strong>Data</strong>, a sequence of n bytes of the data themselves, represented by 2n hex digits.</li>
+<li>
+<strong>Checksum</strong>, two hex digits </li>
+</ul><p>Example of Hex file</p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image034.png" alt="image034.png"><br></p>
+
+<p>b). <strong>Hex parser coding</strong></p>
+
+<p>Get reference from <a href="https://github.com/bminer/intel-hex.js">https://github.com/bminer/intel-hex.js</a></p>
+
+<ul>
+<li> <strong>User firmware structure:</strong>
+</li>
+</ul><p>The user firmware application structure look like below. The user firmware start address from 0x400, and at end of user firmware area, there is application info block which record the user firmware information, something like App start Address, App End Address, BL type, etc.</p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image036.png" alt="image036.png"><br>
+In our example, the user application firmware start address is 0x400, however, the application info block address at 0x77F5. That means two pages are needed for this firmware, and a lot of pages bare between first occurred page and last occurred page.</p>
+
+<ul>
+<li><strong>Modification on Intel-hex.js:</strong></li>
+</ul><p>The original hex parser JavaScript will fill 0xFF in page which is not used. In our case, it will generate a big image from address 0x0000 to 0x7800, which is too large for us.  So an array flashPageInUse added in intel-hex.js to record which page is being used. It also as one of return values.</p>
+
+<p><strong>Part of original hex file:</strong></p>
+
+<p>:03040000020447AC
+The data segment is “020447”.</p>
+
+<p><strong>Part of parsed hex file output:</strong></p>
+
+<p>[3572:1121/101801:INFO:CONSOLE(18)] "{"0":2,"1":4,"2":71,
+It is 02, 04, 71(0x47), the result shows correct value.</p>
+
+<ul>
+<li><strong>Parse application info block</strong></li>
+</ul><p>Here is definition of info block, these information needed display to Table in UI.</p>
+
+<div class="highlight highlight-c"><pre><span class="n">SEGMENT_VARIABLE</span><span class="p">(</span><span class="n">TGT_App_InfoBlock</span><span class="p">[],</span> <span class="k">const</span> <span class="n">U8</span><span class="p">,</span> <span class="n">SEG_CODE</span><span class="p">)</span> <span class="o">=</span>
+<span class="p">{</span>
+  <span class="n">BL_SPECIFIC_BYTE</span><span class="p">,</span>
+  <span class="n">APP_FW_VERSION_HIGH</span><span class="p">,</span>
+  <span class="n">APP_FW_VERSION_LOW</span><span class="p">,</span>
+  <span class="n">TGT_FLASH_PAGE_SIZE_CODE</span><span class="p">,</span>
+  <span class="n">TGT_BL_TYPE</span><span class="p">,</span>
+  <span class="n">TGT_MCU_CODE</span><span class="p">,</span>
+  <span class="n">TGT_APP_INFOBLOCK_LENGTH</span><span class="p">,</span>
+  <span class="n">SIG_BYTE3</span><span class="p">,</span>
+  <span class="n">SIG_BYTE2</span><span class="p">,</span>
+  <span class="n">SIG_BYTE1</span><span class="p">,</span>
+  <span class="n">SIG_BYTE0</span><span class="p">,</span>
+<span class="p">};</span>
+</pre></div>
+
+<ul>
+<li><strong>Output to Table</strong></li>
+</ul><p>Named table id = ‘infoBlock’ in index.html
+Open the table by id in script.js, and handle info block from hex parse result.</p>
+
+<div class="highlight highlight-c"><pre><span class="n">function</span> <span class="nf">infoBlockDisplay</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">var</span> <span class="n">infoTable</span> <span class="o">=</span> <span class="n">document</span><span class="p">.</span><span class="n">getElementById</span><span class="p">(</span><span class="err">'</span><span class="n">infoBlock</span><span class="err">'</span><span class="p">);</span>
+  <span class="c1">// MCU code</span>
+  <span class="n">infoTable</span><span class="p">.</span><span class="n">rows</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">cells</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">innerHTML</span> <span class="o">=</span> <span class="err">'</span><span class="mi">0</span><span class="n">x</span><span class="err">'</span> <span class="o">+</span> <span class="n">tmp</span><span class="p">[</span><span class="n">FLASH_PAGE_SIZE</span> <span class="o">-</span> <span class="mi">6</span><span class="p">].</span><span class="n">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
+  <span class="c1">// BL type</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="n">FLASH_PAGE_SIZE</span> <span class="o">-</span> <span class="mi">7</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+         <span class="n">infoTable</span><span class="p">.</span><span class="n">rows</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">cells</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">innerHTML</span> <span class="o">=</span> <span class="err">'</span><span class="n">UART</span><span class="err">'</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="c1">// Flash page size</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="n">FLASH_PAGE_SIZE</span> <span class="o">-</span> <span class="mi">8</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+         <span class="n">infoTable</span><span class="p">.</span><span class="n">rows</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">cells</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">innerHTML</span> <span class="o">=</span> <span class="err">'</span><span class="mi">1024</span><span class="err">'</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="n">FLASH_PAGE_SIZE</span> <span class="o">-</span> <span class="mi">8</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+         <span class="n">infoTable</span><span class="p">.</span><span class="n">rows</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">cells</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">innerHTML</span> <span class="o">=</span> <span class="err">'</span><span class="mi">512</span><span class="err">'</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="c1">// App FW Version</span>
+  <span class="n">var</span> <span class="n">ver_high</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">FLASH_PAGE_SIZE</span> <span class="o">-</span> <span class="mi">10</span><span class="p">].</span><span class="n">toString</span><span class="p">();</span>
+  <span class="n">var</span> <span class="n">ver_low</span>  <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">FLASH_PAGE_SIZE</span> <span class="o">-</span> <span class="mi">9</span><span class="p">].</span><span class="n">toString</span><span class="p">();</span>
+  <span class="n">infoTable</span><span class="p">.</span><span class="n">rows</span><span class="p">[</span><span class="mi">4</span><span class="p">].</span><span class="n">cells</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">innerHTML</span> <span class="o">=</span> <span class="n">ver_high</span> <span class="o">+</span> <span class="sc">'.'</span> <span class="o">+</span> <span class="n">ver_low</span><span class="p">;</span>
+  <span class="c1">// Reserved</span>
+  <span class="n">infoTable</span><span class="p">.</span><span class="n">rows</span><span class="p">[</span><span class="mi">5</span><span class="p">].</span><span class="n">cells</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">innerHTML</span> <span class="o">=</span> <span class="err">'</span><span class="mi">0</span><span class="n">x</span><span class="err">'</span> <span class="o">+</span> <span class="n">tmp</span><span class="p">[</span><span class="n">FLASH_PAGE_SIZE</span> <span class="o">-</span> <span class="mi">11</span><span class="p">].</span><span class="n">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
+  <span class="c1">// App Start Addr</span>
+  <span class="n">infoTable</span><span class="p">.</span><span class="n">rows</span><span class="p">[</span><span class="mi">6</span><span class="p">].</span><span class="n">cells</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">innerHTML</span> <span class="o">=</span> <span class="n">firmwareStartAddress</span><span class="p">;</span>
+  <span class="c1">// App End Addr</span>
+  <span class="n">infoTable</span><span class="p">.</span><span class="n">rows</span><span class="p">[</span><span class="mi">7</span><span class="p">].</span><span class="n">cells</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">innerHTML</span> <span class="o">=</span> <span class="n">firmwareEndAddress</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<ul>
+<li><strong>Run result</strong></li>
+</ul><p>Press Ctrl + b, click on button “Select Hex file(s)”, and choose Sample_User_Application.hex in file dialog. The result looks good.</p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image038.png" alt="image038.png"><br></p>
+
+<h3>
+<a name="serial-port-communication" class="anchor" href="#serial-port-communication"><span class="octicon octicon-link"></span></a>Serial port communication</h3>
+
+<p>Reference from <a href="https://github.com/voodootikigod/node-serialport">https://github.com/voodootikigod/node-serialport</a></p>
+
+<ol>
+<li><p><strong>Install serialport plug in for Node.js</strong> <br>
+Before install serialport plug in for Node.js, we need to install Python 2.76. <a href="http://www.python.org/download/releases/2.7.6/">http://www.python.org/download/releases/2.7.6/</a>,
+$npm install serialport</p></li>
+<li><p><strong>Install nw-gyp</strong> <br>
+Things become a little difference between normal node.js third party plugin, node-webkit need to rebuild the plug in. Get reference from  <a href="https://github.com/rogerwang/node-webkit/wiki/Using-Node-modules">https://github.com/rogerwang/node-webkit/wiki/Using-Node-modules</a> 3rd party modules with C/C++ addons.
+$ npm install nw-gyp –g</p></li>
+<li><p><strong>Rebuild node-webkit</strong> <br>
+Enter serialport module directory.
+$ nw-gyp rebuild --target=0.8.0</p></li>
+<li><p><strong>To use</strong> <br></p></li>
+</ol><ul>
+<li><strong>Output string “OMG IT WORS” to COM4</strong></li>
+</ul><div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">serialport</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'serialport'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">com</span> <span class="o">=</span> <span class="nx">serialport</span><span class="p">.</span><span class="nx">SerialPort</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">serialPort</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">com</span><span class="p">(</span><span class="s1">'COM4'</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">baudrate</span><span class="o">:</span> <span class="mi">115200</span>
+<span class="p">});</span>
+<span class="kd">function</span> <span class="nx">serialPortTesting</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'COM port open test\n'</span><span class="p">);</span>
+  <span class="nx">serialPort</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s2">"OMG IT WORKS\r"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Also add serialPortTesting() function in anywhere you want. Check the COM4 output with serial terminal tool, we can see sting “OMG IT WORKS” appear on the terminal tool. That means the serial port operation works.</p>
+
+<ul>
+<li><strong>List all COM ports</strong></li>
+</ul><div class="highlight highlight-javascript"><pre> <span class="nx">serialport</span><span class="p">.</span><span class="nx">list</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">ports</span><span class="p">)</span> <span class="p">{</span>
+         <span class="nx">ports</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">port</span><span class="p">)</span> <span class="p">{</span>
+                 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">port</span><span class="p">.</span><span class="nx">comName</span><span class="p">);</span>
+                 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">port</span><span class="p">.</span><span class="nx">pnpId</span><span class="p">);</span>
+                 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">port</span><span class="p">.</span><span class="nx">manufacturer</span><span class="p">);</span>
+         <span class="p">});</span>
+  <span class="p">});</span>
+</pre></div>
+
+<p>We can see the output from console.</p>
+
+<pre><code> ""COM3"",
+ ""USB\\VID_10C4&amp;PID_EA60\\0001"",
+ ""Silicon Laboratories"" ,
+ ""COM1"",
+ ""ACPI\\PNP0501\\0"",
+ ""(Standard port types)"",
+ ""COM4"",
+ ""USB\\VID_10C4&amp;PID_EA60\\0003""
+ ""Silicon Laboratories"",
+</code></pre>
+
+<ul>
+<li><strong>Update COM port dropdown list</strong></li>
+</ul><div class="highlight highlight-javascript"><pre><span class="kd">function</span> <span class="nx">serialPortList</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">serialport</span><span class="p">.</span><span class="nx">list</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">ports</span><span class="p">)</span> <span class="p">{</span>
+         <span class="kd">var</span> <span class="nx">coms</span> <span class="o">=</span> <span class="p">[];</span>
+         <span class="kd">var</span> <span class="nx">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+         <span class="nx">ports</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">port</span><span class="p">)</span> <span class="p">{</span>
+                 <span class="nx">coms</span><span class="p">[</span><span class="nx">cnt</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="nx">port</span><span class="p">.</span><span class="nx">comName</span><span class="p">;</span>
+         <span class="p">});</span>
+         <span class="nx">coms</span><span class="p">.</span><span class="nx">sort</span><span class="p">();</span>
+         <span class="kd">var</span> <span class="nx">comPortInput</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'comPort'</span><span class="p">);</span>
+         <span class="nx">coms</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">com</span><span class="p">)</span> <span class="p">{</span>
+                 <span class="kd">var</span> <span class="nx">option</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">'option'</span><span class="p">);</span>
+                 <span class="nx">option</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">com</span><span class="p">;</span>
+                 <span class="nx">comPortInput</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">option</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+         <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</pre></div>
+
+<ul>
+<li><strong>Open COM Port button function implementation</strong></li>
+</ul><div class="highlight highlight-javascript"><pre><span class="kd">function</span> <span class="nx">serialPortOpen</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">comPortInput</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'comPort'</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">comSelected</span> <span class="o">=</span> <span class="nx">comPortInput</span><span class="p">.</span><span class="nx">options</span><span class="p">[</span><span class="nx">comPortInput</span><span class="p">.</span><span class="nx">selectedIndex</span><span class="p">].</span><span class="nx">text</span><span class="p">;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">comSelected</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">SerialPort</span> <span class="o">=</span> <span class="nx">serialport</span><span class="p">.</span><span class="nx">SerialPort</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">serialPort</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SerialPort</span><span class="p">(</span><span class="nx">comSelected</span><span class="p">,</span> <span class="p">{</span>
+         <span class="nx">baudrate</span><span class="o">:</span> <span class="mi">115200</span>
+  <span class="p">},</span> <span class="kc">false</span><span class="p">);</span>
+  <span class="nx">serialPort</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+         <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+                 <span class="kd">var</span> <span class="nx">textArea</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'textArea'</span><span class="p">);</span>
+                 <span class="kd">var</span> <span class="nx">tmp</span> <span class="o">=</span> <span class="nx">textArea</span><span class="p">.</span><span class="nx">value</span> <span class="o">+</span> <span class="nx">err</span> <span class="o">+</span> <span class="s1">'\n'</span><span class="p">;</span>
+                 <span class="nx">textArea</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">tmp</span><span class="p">;</span>
+                 <span class="k">return</span><span class="p">;</span>
+         <span class="p">}</span>
+         <span class="nx">serialPort</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s1">'OMG IT WORKS\r'</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</pre></div>
+
+<h3>
+<a name="firmware-update-control-function-implementation" class="anchor" href="#firmware-update-control-function-implementation"><span class="octicon octicon-link"></span></a>Firmware update control function implementation.</h3>
+
+<ul>
+<li>The protocol can get reference from F330 UART bootloader firmware. <br>
+For quick demonstration purpose, we remove CRC function from firmware. The firmware main loop like below.</li>
+</ul><div class="highlight highlight-c"><pre> <span class="k">while</span><span class="p">(</span><span class="n">SRC_Disp_TGT_Info</span><span class="p">()</span> <span class="o">!=</span> <span class="n">SRC_RSP_OK</span><span class="p">);</span>
+  <span class="n">SRC_Response</span> <span class="o">=</span> <span class="n">SRC_Get_Info</span><span class="p">();</span>
+  <span class="n">SRC_Validate_Response</span><span class="p">(</span><span class="n">SRC_Response</span><span class="p">,</span> <span class="n">SRC_CMD_GET_INFO</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">Last_Error</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+     <span class="k">goto</span> <span class="n">error</span><span class="p">;</span>
+  <span class="n">Flash_Key0</span> <span class="o">=</span> <span class="n">rx_buf</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+  <span class="n">Flash_Key1</span> <span class="o">=</span> <span class="n">rx_buf</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+  <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
+      <span class="n">SRC_Response</span> <span class="o">=</span> <span class="n">SRC_Get_Page_Info</span><span class="p">();</span>
+      <span class="n">SRC_Page_CRC</span> <span class="o">=</span> <span class="n">rx_buf</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">|</span> <span class="p">(</span><span class="n">rx_buf</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">);</span>
+      <span class="n">page_addr</span> <span class="o">=</span> <span class="n">rx_buf</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">|</span> <span class="p">(</span><span class="n">rx_buf</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">);</span>
+      <span class="n">SRC_Validate_Response</span><span class="p">(</span><span class="n">SRC_Response</span><span class="p">,</span> <span class="n">SRC_CMD_GET_PAGE_INFO</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">Last_Error</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+          <span class="k">break</span><span class="p">;</span>
+      <span class="c1">// Exit this loop if no more pages are available from source</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">SRC_Response</span> <span class="o">==</span> <span class="n">SRC_RSP_DATA_END</span><span class="p">)</span>
+         <span class="k">break</span><span class="p">;</span>
+      <span class="n">SRC_Response</span> <span class="o">=</span> <span class="n">SRC_Get_Page</span><span class="p">(</span><span class="n">Page_Buf</span><span class="p">);</span>
+      <span class="n">SRC_Validate_Response</span><span class="p">(</span><span class="n">SRC_Response</span><span class="p">,</span> <span class="n">SRC_CMD_GET_PAGE</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">Last_Error</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+         <span class="k">break</span><span class="p">;</span>
+      <span class="n">TGT_Erase_Page</span><span class="p">(</span><span class="n">page_addr</span><span class="p">);</span>
+      <span class="n">TGT_Write_Flash</span><span class="p">(</span><span class="n">Page_Buf</span><span class="p">,</span> <span class="n">page_addr</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<ul>
+<li>Test result.</li>
+</ul><p>a. Prepare C8051F330-TB board.<br>
+b. Download UART bootloader firmware in it.<br>
+c. Connect UART interface to PC, it appears COM4.<br>
+d. Press Ctrl+b to run the HTML5 updater.<br>
+e. Select blink sample application hex file by clicking Select Hex Files button.<br>
+f. Select COM4 from dropdown list, and click on Open COM Port button.<br>
+g. The blinky application will download to target board automatically. And reset MCU at end of updating.<br>
+h. We can see a green LED(D2) on board is blinking.<br>
+i. We are done!<br></p>
+
+<p><img src="https://raw.github.com/MarkDing/HTML5_UART_BL/master/images/image039.png" alt="image039.png"><br></p>
+
+<h3>
+<a name="source-code" class="anchor" href="#source-code"><span class="octicon octicon-link"></span></a>Source code</h3>
+
+<p>The source code can be found from <a href="https://github.com/MarkDing/HTML5_UART_BL">https://github.com/MarkDing/HTML5_UART_BL</a></p>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>LICENSE</h2>
+
+<p>The MIT License (MIT)</p>
+
+<p>Copyright (c) 2013 Mark Ding(<a href="mailto:mark.ding@hotmail.com">mark.ding@hotmail.com</a>)</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Html5 uart bl maintained by <a href="https://github.com/MarkDing">MarkDing</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
